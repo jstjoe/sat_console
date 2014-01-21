@@ -1,0 +1,7 @@
+{
+  "app": {
+    "description":  "Play the famous zen tunes in your help desk.",
+    "name":         "Buddha Machine",
+    "loading":      "Loading"
+  }
+}
