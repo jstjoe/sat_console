@@ -1,3 +1,38 @@
 <div class="form">
- {{t "form"}}
+ <h4>{{t "app.filters"}}</h4>
+ <form>
+  <select id="filter_select" name="filter_select">
+    <option value="none">
+      none
+    </option>
+    <option value="received">
+      received
+    </option> 
+    <option value="received_with_comment">
+      received_with_comment
+    </option>
+    <option value="received_without_comment">
+      received_without_comment
+    </option>
+    <option value="good">
+      good
+    </option>
+    <option value="good_with_comment">
+      good_with_comment
+    </option>
+    <option value="good_without_comment">
+      good_without_comment
+    </option>
+    <option value="bad">
+      bad
+    </option>
+    <option value="bad_with_comment">
+      bad_with_comment
+    </option>
+    <option value="bad_without_comment">
+      bad_without_comment
+    </option>
+  </select>
+  <button class="submit">Submit</button>
+ </form>
 </div>

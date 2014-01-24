@@ -1,7 +1,8 @@
 {
   "app": {
-    "description":  "Play the famous zen tunes in your help desk.",
-    "name":         "Buddha Machine",
-    "loading":      "Loading"
+    "description":  "Keep an eye on your team's satisfaction ratings.",
+    "name":         "Satisfaction Console",
+    "loading":      "Loading",
+    "filters":      "Filters"
   }
 }

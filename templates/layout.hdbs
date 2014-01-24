@@ -1,6 +1,6 @@
 <header>
   <span class="logo"/>
-  <h3>{{setting "name"}}</h3>
+  <h4>{{setting "name"}}</h4>
 </header>
 <section data-main/>
 <footer>
