@@ -3,6 +3,7 @@
     "description":  "Keep an eye on your team's satisfaction ratings.",
     "name":         "Satisfaction Console",
     "loading":      "Loading",
-    "filters":      "Filters"
+    "filters":      "Filter",
+    "range":        "Days back"
   }
 }

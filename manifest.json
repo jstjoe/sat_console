@@ -19,6 +19,11 @@
     "name": "Default Filter",
     "type": "text",
     "default": "received_with_comment"
+  },
+  {
+    "name": "Days Back",
+    "type": "number",
+    "default": "5"
   }
   ]
 }
