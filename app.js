@@ -4,7 +4,10 @@
     events: {
       'app.activated':'getDate',
       'click .submit':'loadChoices',
-      'click .show_form': function() {this.switchTo('form');},
+      'click .show_form': function(e) {
+        if (e) { e.preventDefault(); }
+        this.switchTo('form');
+      },
       //request events
       'getFilteredRatings.done':'parseSatRatings',
       'getAllRatings.done':'parseSatRatings'
@@ -36,7 +39,7 @@
       getOrg: function(id, n) {
         return {
           url: '/api/v2/organizations/' + id + '.json',
-          //success: this.addOrgName(n)
+          success: function(data){this.addOrgName(data, n);}
         };
       }
     },
@@ -67,10 +70,12 @@
         this.switchTo('form');
       }
     },
-    loadChoices: function() {
+    loadChoices: function(e) {
+      if (e) { e.preventDefault(); }
       var filter = this.$('#filter_select').val();
       this.daysBack = this.$('#range').val();
       this.loadRatings(filter);
+      this.switchTo('loading');
     },
     loadRatings: function(filter, next_page_url) {
       if (filter == 'received' || filter == 'received_with_comment' || filter == 'received_without_comment' || filter == 'good' || filter == 'good_with_comment' || filter == 'good_without_comment' || filter == 'bad' || filter == 'bad_with_comment' || filter == 'bad_without_comment') {
@@ -117,48 +122,59 @@
       }
     },
     encodeRatings: function() {
-        var n = 0,
-          ratingMs = Date.now();
-          //console.log("Now: " + ratingMs);
-        this.unencoded = new Array();
-        this.encoded = new Array();
-        while (ratingMs > this.startDate) {
-          this.unencoded[n] = this.ratings[n];
-          this.encoded[n] = {
-            ticket_id: encodeURIComponent(this.ratings[n].ticket_id),
-            score: encodeURIComponent(this.ratings[n].score),
-            organization_id: encodeURIComponent(this.ratings[n].organization_id),
-            assignee_id: encodeURIComponent(this.ratings[n].assignee_id),
-            created_at: encodeURIComponent(this.ratings[n].created_at),
-            comment: encodeURIComponent(this.ratings[n].comment)
-          };
-          this.ajax('getUser', this.ratings[n].assignee_id, n, 'assignee');
-          ratingMs = Date.parse(this.ratings[n].created_at);
-          //console.log("Next one created at: " + this.ratings[n].created_at + ", " + ratingMs);
-          n++;
-        }
-        console.log(this.unencoded);
-        this.switchTo('csv', {
-        ratings: this.unencoded,
-        encoded_ratings: this.encoded,
-        filter: this.filter,
-        daysBack: this.daysBack
-      });
+      var n = 0,
+        ratingMs = Date.now();
+        //console.log("Now: " + ratingMs);
+      this.unencoded = [];
+      this.encoded = [];
+      while (ratingMs > this.startDate) {
+        this.unencoded[n] = this.ratings[n];
+        this.encoded[n] = {
+          ticket_id: encodeURIComponent(this.ratings[n].ticket_id),
+          score: encodeURIComponent(this.ratings[n].score),
+          organization_id: encodeURIComponent(this.ratings[n].organization_id),
+          assignee_id: encodeURIComponent(this.ratings[n].assignee_id),
+          created_at: encodeURIComponent(this.ratings[n].created_at),
+          comment: encodeURIComponent(this.ratings[n].comment)
+        };
+        this.ajax('getUser', this.ratings[n].assignee_id, n, 'assignee');
+        //this.ajax('getOrg', this.ratings[n].organization_id, n);
+        ratingMs = Date.parse(this.ratings[n].created_at);
+        //console.log("Next one created at: " + this.ratings[n].created_at + ", " + ratingMs);
+        n++;
+      }
+      console.log(this.unencoded);
+      
     },
     addUserName: function(data, n, role) {
       var user = data.user;
         userName = user.name;
+        console.log(userName);
         this.unencoded[n].assignee = userName;
         this.encoded[n].assignee = encodeURIComponent(userName);
         //this.unencoded[n].requester = userName;
         //this.encoded[n].requester = encodeURIComponent(userName);
+      if(this.unencoded[n] == this.unencoded[this.unencoded.length - 1]) {
+        this.switchTo('csv', {
+          ratings: this.unencoded,
+          encoded_ratings: this.encoded,
+          filter: this.filter,
+          daysBack: this.daysBack
+        });
+      }
     },
-    addOrgName: function(data, n) {
-      var org = data.organization;
-        orgName = org.name;
-        this.unencoded[n].organization = orgName;
-        this.encoded[n].organization = encodeURIComponent(orgName);
-    }
+    // addOrgName: function(data, n) {
+    //   var org = data.organization;
+    //     orgName = org.name;
+    //     this.unencoded[n].organization = orgName;
+    //     this.encoded[n].organization = encodeURIComponent(orgName);
+    //   this.switchTo('csv', {
+    //     ratings: this.unencoded,
+    //     encoded_ratings: this.encoded,
+    //     filter: this.filter,
+    //     daysBack: this.daysBack
+    //   });
+    // }
   };
 
 }());
