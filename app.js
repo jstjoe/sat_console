@@ -125,6 +125,7 @@
       var n = 0,
         ratingMs = Date.now();
         //console.log("Now: " + ratingMs);
+      this.user_i = 0;
       this.unencoded = [];
       this.encoded = [];
       while (ratingMs > this.startDate) {
@@ -137,24 +138,38 @@
           created_at: encodeURIComponent(this.ratings[n].created_at),
           comment: encodeURIComponent(this.ratings[n].comment)
         };
-        this.ajax('getUser', this.ratings[n].assignee_id, n, 'assignee');
+        console.log(this.ratings[n].assignee_id);
+        console.log(this.user_i);
+        if (this.ratings[n].assignee_id) {
+          this.ajax('getUser', this.ratings[n].assignee_id, n, 'assignee');
+        } else {
+          this.user_i++;
+        }
         //this.ajax('getOrg', this.ratings[n].organization_id, n);
         ratingMs = Date.parse(this.ratings[n].created_at);
         //console.log("Next one created at: " + this.ratings[n].created_at + ", " + ratingMs);
         n++;
       }
       console.log(this.unencoded);
+      // this.switchTo('csv', {
+      //   ratings: this.unencoded,
+      //   encoded_ratings: this.encoded,
+      //   filter: this.filter,
+      //   daysBack: this.daysBack
+      // });
       
     },
     addUserName: function(data, n, role) {
-      var user = data.user;
+      this.user_i++;
+      console.log(this.user_i);
+      var user = data.user,
         userName = user.name;
-        console.log(userName);
+        // console.log(userName);
         this.unencoded[n].assignee = userName;
         this.encoded[n].assignee = encodeURIComponent(userName);
         //this.unencoded[n].requester = userName;
         //this.encoded[n].requester = encodeURIComponent(userName);
-      if(this.unencoded[n] == this.unencoded[this.unencoded.length - 1]) {
+      if(this.user_i == this.unencoded.length) {
         this.switchTo('csv', {
           ratings: this.unencoded,
           encoded_ratings: this.encoded,
