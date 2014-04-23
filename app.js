@@ -130,6 +130,17 @@
       this.encoded = [];
       while (ratingMs > this.startDate) {
         this.unencoded[n] = this.ratings[n];
+        //format date
+        var locale_string = new Date(this.ratings[n].created_at);
+        this.unencoded[n].created_at = locale_string.toLocaleDateString();
+        //add thumb
+        if(this.ratings[n].score == 'good') {
+          this.unencoded[n].thumb = '<i class="icon-thumbs-up"></i>';
+          this.unencoded[n].score = helpers.fmt("<span class='label label-success'>%@</span>", this.unencoded[n].score);
+        } else if (this.ratings[n].score == 'bad') {
+          this.unencoded[n].thumb = '<i class="icon-thumbs-down"></i>';
+          this.unencoded[n].score = helpers.fmt("<span class='label label-important'>%@</span>", this.unencoded[n].score);
+        }
         this.encoded[n] = {
           ticket_id: encodeURIComponent(this.ratings[n].ticket_id),
           score: encodeURIComponent(this.ratings[n].score),

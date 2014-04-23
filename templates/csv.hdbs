@@ -1,5 +1,5 @@
-<strong>{{t "app.filters"}}:</strong> {{filter}} &nbsp;&nbsp;&nbsp;
-<strong>{{t "app.range"}}:</strong> {{daysBack}}<br><br>
+<strong>{{t "app.filters"}}:</strong> <span class="label">{{filter}}</span> &nbsp;&nbsp;&nbsp;
+<strong>{{t "app.range"}}:</strong> <span class="badge">{{daysBack}}</span><br><br>
 
 <button class="show_form btn"><i class="icon-edit"></i> Change Options</button> &nbsp;
 <a href="data:application/octet-stream,ID%2CScore%2CAssignee%2CCreated%2CComment%0A{{#encoded_ratings}}#{{ticket_id}}%2C{{score}}%2C{{assignee}}%2C{{created_at}}%2C%22{{comment}}%22%0A{{/encoded_ratings}}" download="satisfaction_ratings.csv" class="btn"><i class="icon-download"></i> Download CSV</a>
@@ -11,7 +11,7 @@
       <thead>
         <th>
           <td>Ticket</td>
-          <td>Rating</td>
+          <td colspan='2'>Rating</td>
           <td>Assignee</td>
           <td>Created</td>
           <td>Comment</td>
@@ -22,8 +22,11 @@
             <td class="ticket_id" data-rating-id="{{id}}">
               <a href="#/tickets/{{ticket_id}}">#{{ticket_id}}</a>
             </td>
+            <td class="thumb">
+              {{{thumb}}}
+            </td>
             <td class="score">
-              {{score}}
+              {{{score}}}
             </td>
             <td class="assignee">
               {{assignee}}
