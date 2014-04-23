@@ -1,6 +1,7 @@
 <div class="form">
- <h4>{{t "app.filters"}}</h4>
+ 
  <form>
+ {{t "app.filters"}}
   <select id="filter_select" name="filter_select">
     <option value="all">
       all
@@ -32,8 +33,8 @@
     <option value="bad_without_comment">
       bad_without_comment
     </option>
-  </select><br><br>
-  Days back: <input type="number" id="range" min="1" max="100" value="{{setting "Days Back"}}"></input>
+  </select> &nbsp;&nbsp;&nbsp;
+  <span>Days back: <input type="number" id="range" min="1" max="100" value="{{setting "Days Back"}}"></input></span>
   <button class="submit btn btn-primary">Submit</button>
  </form>
 </div>
